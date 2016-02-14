@@ -3,13 +3,16 @@ var Y_Step=50;
 
 // Enemies our player must avoid
 
+Object.prototype.Reset = function(){
+    this.x=100;
+    this.y=100;
+}
+
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.x=0;
     this.y=20;
-    this.width = 50;
-    this.height = 85;
     this.speed=Math.randon()*3;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -22,7 +25,10 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x =
+    this.x =(100*dt*this.speed)
+        if(this.x>520){
+            this.Reset();
+        }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -40,11 +46,28 @@ var Player= function(){
     
 };
 Player.prototype.update=funtion(dt){
-    if (player.y<20){
-        player.reset();
+    //if left key is pressed and player is not on edge of map, pressed decrement x
+    if(this.ctlKey === 'left' && this.x > 0){ 
+        this.x = this.x - 50;
+    //if right key is pressed and player is not on edge of map increment x 
+    }else if(this.ctlKey === 'right' && this.x != 400){
+        this.x = this.x + 50;
+    //if up key is pressed increment y 
+    }else if(this.ctlKey === 'up'){
+        this.y = this.y - 50;
+    //if down key is pressed and player is not on edge of map decrement y 
+    }else if (this.ctlKey === 'down' && this.y != 400){
+        this.y = this.y + 50;
     }
-     console.log('player x = ', this.x, 'player y = ', this.y);
+    this.ctlKey = null;
+    
+    //If on water, reset
+    if(this.y < 25){
+        this.reset();
+    }
 };
+
+
 Player.protoype.handleInput=funtion(e){
     this.ctlKey=e;
     
